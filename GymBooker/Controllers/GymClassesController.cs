@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymBooker.Data;
 using GymBooker.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace GymBooker.Controllers
 {
     public class GymClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GymClassesController(ApplicationDbContext context)
+
+        public GymClassesController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: GymClasses
@@ -32,15 +36,21 @@ namespace GymBooker.Controllers
             {
                 return NotFound();
             }
+            var users = await _context.ApplicationUsers.ToListAsync();
+            if(users == null) return NotFound();
+            var gymClass = await _context.GymClasses.Include(c => c.UserGymClasses).FirstOrDefaultAsync(g => g.Id == id);
+            if(gymClass == null) return NotFound();
 
-            var gymClass = await _context.GymClasses
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (gymClass == null)
-            {
-                return NotFound();
-            }
+            List<ApplicationUser> usersList = new List<ApplicationUser>();
+            foreach (ApplicationUser user in users)
+                foreach(ApplicationUserGymClass g in user.GymClasses)
+                    if(g.ApplicationUserId == user.Id && gymClass.Id == g.GymClassId)
+                        usersList.Add(user);
 
-            return View(gymClass);
+            (GymClass GymClass, List<ApplicationUser> Users) output = new(gymClass, usersList);
+
+
+            return View(output);
         }
 
         // GET: GymClasses/Create
@@ -152,6 +162,37 @@ namespace GymBooker.Controllers
         private bool GymClassExists(int id)
         {
             return _context.GymClasses.Any(e => e.Id == id);
+        }
+
+        /// <summary>
+        /// change if a USER ID BOOKED OT A CLASS OR NOT
+        /// </summary>
+        /// <param name="id">the id of the gym class a logged in user to to be book on or off of</param>
+        /// <returns></returns>
+        public async Task<IActionResult> BookingToggle(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var gymclass = await _context.GymClasses.Include(v => v.UserGymClasses).FirstOrDefaultAsync(v => v.Id == id);
+
+            if (gymclass == null) { return NotFound(); }
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null) { return NotFound(); }
+
+            var classinstance = gymclass.UserGymClasses.FirstOrDefault(c => c.ApplicationUserId == user.Id);
+            if (classinstance != default)
+            {
+                gymclass.UserGymClasses.Remove(classinstance);
+            }
+            else
+            {
+                gymclass.UserGymClasses.Add(new ApplicationUserGymClass() { GymClassId = gymclass.Id, ApplicationUserId = user.Id });
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

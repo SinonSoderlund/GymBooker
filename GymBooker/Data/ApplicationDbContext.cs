@@ -17,11 +17,6 @@ namespace GymBooker.Data
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-GymBooker-6d42c440-ac44-4d2c-9100-8fad11a03700;Trusted_Connection=True;MultipleActiveResultSets=true");
-        }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

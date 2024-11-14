@@ -1,4 +1,4 @@
-﻿@model GymBooker.Models.GymClass
+﻿@model (GymClass GymClass, List<ApplicationUser> Users)
 
 @{
     ViewData["Title"] = "Details";
@@ -10,27 +10,36 @@
     <h4>GymClass</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GymClass.Name)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GymClass.Name)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartTime)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GymClass.StartTime)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartTime)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GymClass.StartTime)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GymClass.Description)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GymClass.Description)
         </dd>
+        <dt>
+            Signed up users
+        </dt>
+        @foreach (ApplicationUser applicationUser in Model.Users)
+        {
+            <dd class="col-sm-10">
+                @(applicationUser.Email)
+            </dd>
+        }
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.GymClass.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

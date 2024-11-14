@@ -22,6 +22,8 @@ namespace GymBooker
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
 
+            builder.Services.AddScoped<UserManager<ApplicationUser>>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

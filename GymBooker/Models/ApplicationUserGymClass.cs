@@ -2,7 +2,7 @@
 {
     public class ApplicationUserGymClass
     {
-        public int ApplicationUserId { get; set; }
+        public string ApplicationUserId { get; set; } = string.Empty;
         public int GymClassId { get; set; }
     }
 }
