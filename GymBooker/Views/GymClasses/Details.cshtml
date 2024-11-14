@@ -1,4 +1,4 @@
-﻿@model (GymClass GymClass, List<ApplicationUser> Users)
+﻿@model GymClass
 
 @{
     ViewData["Title"] = "Details";
@@ -11,35 +11,35 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.GymClass.Name)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.GymClass.Name)
+            @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.GymClass.StartTime)
+            @Html.DisplayNameFor(model => model.StartTime)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.GymClass.StartTime)
+            @Html.DisplayFor(model => model.StartTime)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.GymClass.Description)
+            @Html.DisplayNameFor(model => model.Description)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.GymClass.Description)
+            @Html.DisplayFor(model => model.Description)
         </dd>
         <dt>
             Signed up users
         </dt>
-        @foreach (ApplicationUser applicationUser in Model.Users)
+        @foreach (var applicationUser in Model.UserGymClasses)
         {
             <dd class="col-sm-10">
-                @(applicationUser.Email)
+                @(applicationUser.ApplicationUser.Email)
             </dd>
         }
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.GymClass.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

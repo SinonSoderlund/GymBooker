@@ -36,19 +36,7 @@ namespace GymBooker.Controllers
             {
                 return NotFound();
             }
-            var users = await _context.ApplicationUsers.ToListAsync();
-            if(users == null) return NotFound();
-            var gymClass = await _context.GymClasses.Include(c => c.UserGymClasses).FirstOrDefaultAsync(g => g.Id == id);
-            if(gymClass == null) return NotFound();
-
-            List<ApplicationUser> usersList = new List<ApplicationUser>();
-            foreach (ApplicationUser user in users)
-                foreach(ApplicationUserGymClass g in user.GymClasses)
-                    if(g.ApplicationUserId == user.Id && gymClass.Id == g.GymClassId)
-                        usersList.Add(user);
-
-            (GymClass GymClass, List<ApplicationUser> Users) output = new(gymClass, usersList);
-
+            var output = await _context.GymClasses.Include(g => g.UserGymClasses).ThenInclude(t => t.ApplicationUser).FirstOrDefaultAsync(o => o.Id == id);
 
             return View(output);
         }
