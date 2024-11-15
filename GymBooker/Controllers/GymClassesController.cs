@@ -27,7 +27,8 @@ namespace GymBooker.Controllers
         // GET: GymClasses
         public async Task<IActionResult> Index()
         {
-            return View(await _context.GymClasses.ToListAsync());
+            
+            return View(await _context.GymClasses.Include(a => a.UserGymClasses).ToListAsync());
         }
 
         // GET: GymClasses/Details/5
@@ -190,6 +191,21 @@ namespace GymBooker.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+        [Authorize]
+        public async Task<IActionResult> History()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var res = await _context.ApplicationUsers.Include(u => u.GymClasses).ThenInclude(g => g.GymClass).FirstOrDefaultAsync(u => u.Id == user.Id);
+            return View(res.GymClasses.Select(m => m.GymClass));
+
+        }
+        [Authorize]
+        public async Task<IActionResult> Booked()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var res = await _context.ApplicationUsers.Include(u => u.GymClasses).ThenInclude(g => g.GymClass).FirstOrDefaultAsync(u => u.Id == user.Id);
+            return View(res.GymClasses.Select(m => m.GymClass));
         }
     }
 }

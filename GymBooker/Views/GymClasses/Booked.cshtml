@@ -5,27 +5,9 @@
 }
 @{
     string userId = userManager.GetUserId(User)!;
-    bool showHistory = false;
-    void clicker() => showHistory = !showHistory;
 }
 
 <h1>Index</h1>
-@if (User.IsInRole("Admin"))
-{
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-}
-<button oninput="sub" class="btn btn-primary" onclick="clicker">
-    @if (showHistory)
-    {
-        <span> Hide History</span>
-    }
-    else
-    {
-        <span> Show History</span>
-    }
-</button>
 <table class="table">
     <thead>
         <tr>
@@ -44,7 +26,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            @if (item.EndTime >= DateTime.Now || showHistory)
+            @if (item.EndTime >= DateTime.Now)
             {
                 <tr>
                     <td>

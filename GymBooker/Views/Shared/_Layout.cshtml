@@ -21,6 +21,11 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="GymClasses" asp-action="Index">Gym Classes</a>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a class="nav-link text-dark" asp-area="" asp-controller="GymClasses" asp-action="Booked">Booked Gym Passes</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="GymClasses" asp-action="History">Gym Pass History</a>
+                            }
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

@@ -3,29 +3,8 @@
 @{
     ViewData["Title"] = "Index";
 }
-@{
-    string userId = userManager.GetUserId(User)!;
-    bool showHistory = false;
-    void clicker() => showHistory = !showHistory;
-}
 
 <h1>Index</h1>
-@if (User.IsInRole("Admin"))
-{
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-}
-<button oninput="sub" class="btn btn-primary" onclick="clicker">
-    @if (showHistory)
-    {
-        <span> Hide History</span>
-    }
-    else
-    {
-        <span> Show History</span>
-    }
-</button>
 <table class="table">
     <thead>
         <tr>
@@ -44,7 +23,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            @if (item.EndTime >= DateTime.Now || showHistory)
+            @if (item.EndTime < DateTime.Now)
             {
                 <tr>
                     <td>
@@ -59,20 +38,6 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <td>
-                            @{
-                                string textout = "";
-                            }
-                            @if (item.UserGymClasses.FirstOrDefault(c => c.ApplicationUserId == userId) != default)
-                            {
-                                textout = "Unbook";
-                            }
-                            else { textout = "Book"; }
-
-                            <a asp-action="BookingToggle" asp-route-id="@item.Id">@textout</a> |
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> <span>|</span>
-                            }
                             <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                             @if (User.IsInRole("Admin"))
                             {
