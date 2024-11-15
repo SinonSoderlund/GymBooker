@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace GymBooker.Data.Migrations
+namespace GymBooker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -261,17 +261,21 @@ namespace GymBooker.Data.Migrations
 
             modelBuilder.Entity("GymBooker.Models.ApplicationUserGymClass", b =>
                 {
-                    b.HasOne("GymBooker.Models.ApplicationUser", null)
+                    b.HasOne("GymBooker.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("GymClasses")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GymBooker.Models.GymClass", null)
+                    b.HasOne("GymBooker.Models.GymClass", "GymClass")
                         .WithMany("UserGymClasses")
                         .HasForeignKey("GymClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("GymClass");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
