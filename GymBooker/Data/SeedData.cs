@@ -1,6 +1,7 @@
 ﻿using GymBooker.Data;
 using GymBooker.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace GymBooker.Data
 {
@@ -63,7 +64,10 @@ namespace GymBooker.Data
             {
                 UserName = accountEmail,
                 Email = accountEmail,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                FirstName = fName,
+                LastName = lName,
+                TimeOfRegistration = DateTime.Now,
             };
 
             var result = await userManager.CreateAsync(user, password);
