@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GymBooker.Data;
 using GymBooker.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GymBooker.Controllers
 {
@@ -30,6 +31,7 @@ namespace GymBooker.Controllers
         }
 
         // GET: GymClasses/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -42,6 +44,7 @@ namespace GymBooker.Controllers
         }
 
         // GET: GymClasses/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -52,6 +55,7 @@ namespace GymBooker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Name,StartTime,Description")] GymClass gymClass)
         {
             if (ModelState.IsValid)
@@ -64,6 +68,7 @@ namespace GymBooker.Controllers
         }
 
         // GET: GymClasses/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,6 +89,7 @@ namespace GymBooker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartTime,Description")] GymClass gymClass)
         {
             if (id != gymClass.Id)
@@ -115,6 +121,7 @@ namespace GymBooker.Controllers
         }
 
         // GET: GymClasses/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,6 +142,7 @@ namespace GymBooker.Controllers
         // POST: GymClasses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var gymClass = await _context.GymClasses.FindAsync(id);
@@ -157,6 +165,7 @@ namespace GymBooker.Controllers
         /// </summary>
         /// <param name="id">the id of the gym class a logged in user to to be book on or off of</param>
         /// <returns></returns>
+        [Authorize]
         public async Task<IActionResult> BookingToggle(int? id)
         {
             if (id == null) return NotFound();
